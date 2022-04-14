@@ -7,7 +7,7 @@ const WeatherAPI = () => {
   const [weather, setWeather] = useState([]);
   const getGeo = async () => {
     const response = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=shanghai&limit=5&appid=e6b599415a269a00410ee2f4055aed56`
+      `https://api.openweathermap.org/geo/1.0/direct?q=shanghai&limit=5&appid=e6b599415a269a00410ee2f4055aed56`
     );
     const json = await response.json();
     console.log('set geo');
