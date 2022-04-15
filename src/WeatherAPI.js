@@ -2,18 +2,32 @@ const { useState, useEffect } = require('react');
 // e6b599415a269a00410ee2f4055aed56
 const WeatherAPI = () => {
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('Seoul');
   const [lon, setLon] = useState(0);
   const [lat, setLat] = useState(0);
   const [weather, setWeather] = useState([]);
-  const getGeo = async () => {
+  const [city, setCity] = useState([]);
+  let txt;
+  const handleChange = (e) => {
+    txt = e.target.value;
+    console.log(txt);
+    setSearch(txt);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getGeo(search);
+  };
+  const selectCity = (e) => {
+    console.log(e.target.key);
+  };
+  const getGeo = async (search) => {
     const response = await fetch(
-      `https://api.openweathermap.org/geo/1.0/direct?q=shanghai&limit=5&appid=e6b599415a269a00410ee2f4055aed56`
+      `https://api.openweathermap.org/geo/1.0/direct?q=${search}&limit=5&appid=e6b599415a269a00410ee2f4055aed56`
     );
-    const json = await response.json();
-    console.log('set geo');
-    setLat(json[0].lat);
-    setLon(json[0].lon);
-    setLoading(false);
+    const json = await response.json().then((json) => {
+      setCity(json);
+      setLoading(false);
+    });
   };
   const getWeather = async () => {
     const response = await fetch(
@@ -21,18 +35,36 @@ const WeatherAPI = () => {
     );
     const json = await response.json();
     setWeather(json);
-    console.log(json);
   };
-  useEffect(() => {
-    getGeo();
-  }, []);
+
   useEffect(() => {
     getWeather();
   }, [lon]);
 
   return (
     <div>
-      {loading ? (
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          onChange={handleChange}
+          value={txt}
+          placeholder="Search for a city"
+        />
+        <button>Search</button>
+      </form>
+      {loading ? null : (
+        <ul>
+          {city.map((value, index) => {
+            return (
+              <li key={index} onClick={selectCity}>
+                {value.name}({value.country})
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      {}
+      {/* {loading ? (
         'Loading'
       ) : (
         <div>
@@ -44,7 +76,7 @@ const WeatherAPI = () => {
             <li>{weather.weather[0].description}</li>
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
