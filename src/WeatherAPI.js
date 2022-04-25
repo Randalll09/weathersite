@@ -17,8 +17,12 @@ const WeatherAPI = () => {
     e.preventDefault();
     getGeo(search);
   };
-  const selectCity = (e) => {
-    console.log(e.target.key);
+  const selectCity = (index) => {
+    console.log(city[index]);
+    let selected = city[index];
+    setLon(selected.lon);
+    setLat(selected.lat);
+    console.log(lon);
   };
   const getGeo = async (search) => {
     const response = await fetch(
@@ -56,27 +60,29 @@ const WeatherAPI = () => {
         <ul>
           {city.map((value, index) => {
             return (
-              <li key={index} onClick={selectCity}>
+              <li key={index} onClick={() => selectCity(index)}>
                 {value.name}({value.country})
               </li>
             );
           })}
         </ul>
       )}
-      {}
-      {/* {loading ? (
+      {lat === 0 ? (
         'Loading'
       ) : (
         <div>
           <p>{weather.name}</p>
           <ul>
-            <li>{weather.main.humidity}</li>
-            <li>{Math.round((weather.main.temp - 273.15) * 2) / 2}</li>
-            <li>{weather.weather[0].main}</li>
-            <li>{weather.weather[0].description}</li>
+            <li>Humidity : {weather.main.humidity}</li>
+            <li>
+              Temperature(Celcius) :{' '}
+              {Math.round((weather.main.temp - 273.15) * 2) / 2}
+            </li>
+            <li>Weather : {weather.weather[0].main}</li>
+            <li>Weather description : {weather.weather[0].description}</li>
           </ul>
         </div>
-      )} */}
+      )}
     </div>
   );
 };
