@@ -75,7 +75,7 @@ const WeatherAPI = () => {
           <ul>
             <li>Humidity : {weather.main.humidity}</li>
             <li>
-              Temperature(Celcius) :{' '}
+              Temperature(Celcius) :
               {Math.round((weather.main.temp - 273.15) * 2) / 2}
             </li>
             <li>Weather : {weather.weather[0].main}</li>
